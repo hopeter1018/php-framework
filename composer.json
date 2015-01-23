@@ -1,0 +1,22 @@
+{
+    "name": "hopeter1018/framework",
+    "description": "My framework",
+    "keywords": [],
+    "version": "0.0.1-dev",
+    "license": "MIT",
+    "authors": [{
+        "name": "Peter Ho",
+        "email": "hokwaichi@gmail.com",
+        "role": "Developer"
+    }],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Hopeter1018\\Framework\\": "src"
+        },
+        "psr-0": {
+            "Hopeter1018\\Framework\\": "src/_psr0/"
+        }
+    }
+}
