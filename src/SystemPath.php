@@ -8,7 +8,7 @@
 
 namespace Hopeter1018\Framework;
 
-use Hopeter1018\PathFileOperations\Path;
+use Hopeter1018\FileOperation\Path;
 
 /**
  * Consolidated Shortcuts to all system writable paths

@@ -10,6 +10,21 @@
         "role": "Developer"
     }],
     "require": {
+        "hopeter1018/framework-helper": "dev-master",
+        "hopeter1018/doctrine-extension": "dev-master",
+        "hopeter1018/file-operation": "dev-master",
+        "hopeter1018/angularjs-postback-validator": "dev-master",
+
+        "symfony/yaml": "2.*",
+        "symfony/filesystem": "2.6.*@dev",
+        "symfony/finder": "2.6.*@dev",
+        "doctrine/orm": "2.4.*@dev",
+        "twig/twig": "1.*",
+        "nesbot/Carbon": "*"
+    },
+    "suggest": {
+        "monolog/monolog": "Allows more advanced logging of the application flow",
+        "swiftmailer/swiftmailer": "5.3.*@dev"
     },
     "autoload": {
         "psr-4": {
