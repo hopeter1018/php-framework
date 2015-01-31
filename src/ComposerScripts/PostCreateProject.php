@@ -22,15 +22,16 @@ final class PostCreateProject implements IComposerScripts
     public static function run(Event $event)
     {
         static::regenKeys($event);
+        static::genInitSql($event);
     }
 
     private static function regenKeys(Event $event)
     {
-        $extra = $event->getComposer()->getPackage()->getExtra();
-        var_dump($extra);
-        if (is_file($filepath = getcwd() . "/application/setup.php")) {
+        if (is_file($filepath = getcwd() . "/bootstrap.php")) {
             file_put_contents($filepath, str_replace(
-                    array ("define('APP_CRYPT_KEY', '');", "define('APP_HASH_KEY', '');"), array ("define('APP_CRYPT_KEY', '" . Hopeter1018\Helper\String::randomString() . "');", "define('APP_HASH_KEY', '" . Hopeter1018\Helper\String::randomString() . "');"), file_get_contents($filepath)
+                array ("define('APP_CRYPT_KEY', '');", "define('APP_HASH_KEY', '');"),
+                array ("define('APP_CRYPT_KEY', '" . Hopeter1018\Helper\String::randomString() . "');", "define('APP_HASH_KEY', '" . Hopeter1018\Helper\String::randomString() . "');"),
+                file_get_contents($filepath)
             ));
         }
     }
