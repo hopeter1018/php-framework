@@ -39,7 +39,7 @@ final class PostCreateProject implements IComposerScripts
     private static function genInitSql($event)
     {
         $dest = getcwd() . "/init.sql";
-        file_put_contents($dest, "CREATE DATABASE IF NOT EXISTS ``");
+        file_put_contents($dest, "CREATE DATABASE IF NOT EXISTS `dummy_db_name`;\r\nUSE `dummy_db_name`;");
     }
 
 }
