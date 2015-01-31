@@ -12,6 +12,7 @@ use Composer\Script\Event;
 
 /**
  * Interface to all composer scripts
+ * getcwd() return project root
  *
  * @version $id$
  * @author peter.ho
