@@ -14,6 +14,7 @@ use Composer\Script\Event;
  * Interface to all composer scripts
  * getcwd() return project root
  *
+ * @link https://getcomposer.org/doc/articles/scripts.md
  * @version $id$
  * @author peter.ho
  */
