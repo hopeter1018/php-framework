@@ -21,7 +21,7 @@ final class PostUpdate implements IComposerScripts
 
     public static function run(Event $event)
     {
-        $extra = $event->getComposer()->getPackage()->getExtra();
+        $extra = $event->getComposer()->getPackage();
         var_dump($extra);
         var_dump(getcwd());
     }
