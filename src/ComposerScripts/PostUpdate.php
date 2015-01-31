@@ -11,14 +11,19 @@ namespace Hopeter1018\Framework\ComposerScripts;
 use Composer\Script\Event;
 
 /**
- * Interface to all composer scripts
+ * PostUpdate
  *
  * @version $id$
  * @author peter.ho
  */
-interface IComposerScripts
+final class PostUpdate implements IComposerScripts
 {
 
-    public static function run(Event $event);
+    public static function run(Event $event)
+    {
+        $extra = $event->getComposer()->getPackage()->getExtra();
+        var_dump($extra);
+        var_dump(getcwd());
+    }
 
 }
