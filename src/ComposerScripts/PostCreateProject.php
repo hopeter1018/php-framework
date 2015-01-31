@@ -36,10 +36,10 @@ final class PostCreateProject implements IComposerScripts
         }
     }
 
-    private static function genInitSql()
+    private static function genInitSql($event)
     {
-        $dest = APP_ROOT . "init.sql";
-        //	file_put_contents($dest);
+        $dest = getcwd() . "/init.sql";
+        file_put_contents($dest, "CREATE DATABASE IF NOT EXISTS ``");
     }
 
 }
