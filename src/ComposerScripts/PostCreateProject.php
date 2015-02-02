@@ -30,7 +30,7 @@ final class PostCreateProject implements IComposerScripts
         if (is_file($filepath = getcwd() . "/bootstrap.php")) {
             file_put_contents($filepath, str_replace(
                 array ("define('APP_CRYPT_KEY', '');", "define('APP_HASH_KEY', '');"),
-                array ("define('APP_CRYPT_KEY', '" . Hopeter1018\Helper\String::randomString() . "');", "define('APP_HASH_KEY', '" . Hopeter1018\Helper\String::randomString() . "');"),
+                array ("define('APP_CRYPT_KEY', '" . \Hopeter1018\Helper\String::randomString() . "');", "define('APP_HASH_KEY', '" . \Hopeter1018\Helper\String::randomString() . "');"),
                 file_get_contents($filepath)
             ));
         }
