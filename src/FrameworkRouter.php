@@ -8,7 +8,7 @@
 
 namespace Hopeter1018\Framework;
 
-use Hopeter1018\FrameworkHelper\ReflectedClass;
+use Hopeter1018\Helper\ReflectedClass;
 use Hopeter1018\Framework\ManagerModule\ModuleController;
 use Hopeter1018\Framework\ManagerModule\ModuleConfigure;
 use Hopeter1018\Framework\Exceptions\FrameworkRouterException;
