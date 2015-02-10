@@ -14,7 +14,7 @@ namespace Hopeter1018\Framework;
  * @version $id$
  * @author peter.ho
  */
-class LoginIdentity
+abstract class LoginIdentity
 {
 
 // <editor-fold defaultstate="collapsed" desc="Constants">
@@ -33,75 +33,15 @@ class LoginIdentity
 // </editor-fold>
 
     /**
-     * -   repeated: if (checkXXX()) { return static::STATUSCODE; } else
-     * 
-     * @param string $user
-     * @param string $password
-     */
-    public static function login($user, $password)
-    {
-        
-    }
-
-    /**
-     * 
-     * @param string $ip
-     * @return boolean
-     */
-    private static function checkIp($ip)
-    {
-        $result = false;
-        return $result;
-    }
-
-    /**
-     * 
-     * 
-     * @param string $user
-     * @param string $password
-     * @return boolean
-     */
-    private static function checkUserPassword($user, $password)
-    {
-        $result = false;
-        return $result;
-    }
-
-    /**
      * Return hashed string of password prefixed by id
      * 
      * @param int $id
      * @param string $password
      * @return string
      */
-    private static function getPasswordHash($id, $password)
+    protected static function getPasswordHash($id, $password)
     {
         return \Hopeter1018\Helper\String::saltyHash($id, $password);
-    }
-
-    /**
-     * Get the logged userId and return null if not logged
-     * 
-     * @return int|null
-     * @throws Exceptions\LoginException
-     */
-    public static function getLoggedUserId()
-    {
-        $session = \Hopeter1018\ExtensionHelper\HoaSession::browserSegment();
-        if ($session->isEmpty()) {
-            throw new Exceptions\LoginException;
-        }
-        return (int) $session['userId'] ?: null;
-    }
-
-    /**
-     * Return if the user is logged
-     * 
-     * @return boolean
-     */
-    public static function isLogged()
-    {
-        return ! \Hopeter1018\ExtensionHelper\HoaSession::browserSegment()->isEmpty();
     }
 
 }
