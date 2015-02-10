@@ -15,6 +15,7 @@ use Hopeter1018\Framework\Exceptions\FrameworkRouterException;
 use Hopeter1018\Framework\Returnable\Returnable;
 use Hopeter1018\DoctrineExtension\AnnotationHelper;
 use Hopeter1018\Framework\UserAccessControl\UserAccessControl;
+use Hopeter1018\TwigExtension\TwigGetter;
 
 /**
  * Description of Zms5Page
@@ -267,7 +268,7 @@ final class FrameworkRouter
             $config = reset(static::$moduleConfigs);    /* @var $config ReflectedClass */
             $defaultTwig = $config->obj->getDefaultTwig();
 
-            echo \Hopeter1018\TwigExtension\TwigGetter::getTemplate($defaultTwig)
+            echo TwigGetter::getTemplate($defaultTwig)
                 ->render(array(
                     "_dir_" => dirname($defaultTwig) . "/",
                     "_file_" => $defaultTwig,
