@@ -14,6 +14,8 @@
         "hopeter1018/doctrine-extension": "dev-master",
         "hopeter1018/file-operation": "dev-master",
         "hopeter1018/angularjs-postback-validator": "dev-master",
+        "hopeter1018/developer-tool": "dev-master",
+        "hopeter1018/twig-extension": "dev-master",
 
         "symfony/yaml": "2.*",
         "symfony/filesystem": "2.6.*@dev",
