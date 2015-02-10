@@ -14,7 +14,7 @@ namespace Hopeter1018\Framework;
  * @version $id$
  * @author peter.ho
  */
-abstract class LoginIdentity
+abstract class LoginIdentity implements ILoginIdentity
 {
 
 // <editor-fold defaultstate="collapsed" desc="Constants">
