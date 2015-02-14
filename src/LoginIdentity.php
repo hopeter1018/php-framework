@@ -32,6 +32,7 @@ abstract class LoginIdentity extends SuperClass implements ILoginIdentity
 
 // </editor-fold>
 
+    protected static $posted = null;
     protected static $sessions = array();
     /**
      * 
@@ -79,6 +80,10 @@ abstract class LoginIdentity extends SuperClass implements ILoginIdentity
         }
     }
 
+    /**
+     * 
+     * @return int static::LOGIN_STATUS_*
+     */
     public static function processLogin()
     {
         $result = static::LOGIN_STATUS_PLEASE_LOGIN;
@@ -90,13 +95,14 @@ abstract class LoginIdentity extends SuperClass implements ILoginIdentity
             $result = static::LOGIN_STATUS_LOGGED;
         } elseif (static::isPostLogin()) {
             try {
-                $result = (static::$posted->captcha === $_SESSION['captcha'])
+                $result = ((static::$posted->captcha === $_SESSION['captcha'])
                     ? static::checkLoginPassword(static::$posted->login, static::$posted->password)
-                    : static::LOGIN_STATUS_CAPTCHA;
+                    : static::LOGIN_STATUS_CAPTCHA);
             } catch (\Exception $ex) {
                 $result = static::LOGIN_STATUS_CSRF;
             }
         }
+
         return $result;
     }
 

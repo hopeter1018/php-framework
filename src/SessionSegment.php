@@ -153,6 +153,11 @@ final class SessionSegment implements \ArrayAccess
      */
     public function get($name)
     {
+        if ($this->sessionMap === null) {
+            static::sessionStart();
+            $this->sessionWriteClose();
+        }
+
         return isset($this->sessionMap[$name])
             ? $this->sessionMap[$name]
             : null;

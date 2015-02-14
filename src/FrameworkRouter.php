@@ -305,6 +305,11 @@ final class FrameworkRouter
                     static::printMethodReturn($methodReturn);
                     $returned = true;
                 }
+            } else {
+                var_dump($uacCtrl->isAllowed());
+                var_dump($_SESSION);
+                echo('Location: login.php');
+                exit;
             }
         } catch (\Exception $ex) {
             \Hopeter1018\Helper\HttpResponse::addMessage($ex->getMessage());
