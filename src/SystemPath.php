@@ -19,6 +19,7 @@ use Hopeter1018\FileOperation\Path;
 final class SystemPath
 {
 
+    CONST ASSETS = 'assets/';
     CONST WB_APP = 'application/';
     CONST WB_APP_GEN = 'application/generated/';
     CONST WB_APP_GEN_DOCTRINE = 'application/generated/doctrine-files/';
@@ -59,7 +60,18 @@ final class SystemPath
     }
 
     /**
-     * Return the absolute path under [workbench/application/generated/netbeans-hinting/]
+     * Return the absolute path under [/]
+     * 
+     * @param string $parts,...
+     * @return string
+     */
+    public static function assetsPath()
+    {
+        return APP_ROOT . Path::concatPath(static::ASSETS, func_get_args());
+    }
+
+    /**
+     * Return the absolute path under [workbench/application/twig-common/]
      * 
      * @param string $parts,...
      * @return string

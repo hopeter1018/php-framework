@@ -20,33 +20,18 @@ interface ILoginIdentity
     /**
      * -   repeated: if (checkXXX()) { return static::STATUSCODE; } else
      * 
-     * @param string $user
+     * @param string $login
      * @param string $password
      */
-    public static function login($user, $password);
+    public static function login($login, $password);
 
     /**
+     * Put logic of database here
      * 
-     * 
-     * @param string $user
+     * @param string $login
      * @param string $password
      * @return boolean
      */
-    public static function checkUserPassword($user, $password);
-
-    /**
-     * Get the logged userId and return null if not logged
-     * 
-     * @return int|null
-     * @throws Exceptions\LoginException
-     */
-    public static function getLoggedUserId();
-
-    /**
-     * Return if the user is logged
-     * 
-     * @return boolean
-     */
-    public static function isLogged();
+    public static function checkUserPassword($login, $password);
 
 }

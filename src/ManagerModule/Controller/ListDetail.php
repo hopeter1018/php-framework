@@ -33,26 +33,6 @@ abstract class ListDetail extends ModuleController
     }
 
     /**
-     * Get the list mode data<br />
-     * Return ng-table compatible array
-     * 
-     * @param int $contentId
-     * @param int $charsetId
-     * @return Returnable Description
-     */
-    abstract public static function listing($contentId, $charsetId);
-
-    /**
-     * Run the delete action
-     * 
-     * @param int $contentId
-     * @param int $charsetId
-     * @param mixed $data
-     * @return Returnable Description
-     */
-    abstract public static function delete($contentId, $charsetId, $data);
-
-    /**
      * Return options used in edit
      * 
      * @param int $contentId
@@ -63,24 +43,5 @@ abstract class ListDetail extends ModuleController
     {
         return array ();
     }
-
-    /**
-     * Get the view/edit mode data
-     * 
-     * @param int $contentId
-     * @param int $charsetId
-     * @return Returnable Description
-     */
-    abstract public static function view($contentId, $charsetId);
-
-    /**
-     * Run the save action
-     * 
-     * @param int $contentId
-     * @param int $charsetId
-     * @param mixed $data
-     * @return Returnable Description
-     */
-    abstract public static function save($contentId, $charsetId, $data);
 
 }
