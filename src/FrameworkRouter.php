@@ -132,27 +132,11 @@ final class FrameworkRouter
     }
 
     /**
-     * Only throws exceptions in UAT mode
-     * 
-     * @param type $namespacedCtrlName
-     * @throws FrameworkRouterException
-     */
-    private static function debugRequestMethod()
-    {
-        if (APP_IS_UAT) {
-            if (null === filter_input(INPUT_GET, static::GET_METHOD)) {
-                throw new FrameworkRouterException("No parameter for 'Method' (\$_GET: " . static::GET_METHOD . ") passed.");
-            }
-        }
-    }
-
-    /**
      * 
      * @param ModuleController|null $ctrl
      */
     private static function getRequestMethod()
     {
-        static::debugRequestMethod();
         $getMethod = filter_input(INPUT_GET, static::GET_METHOD);
         return (null !== $getMethod)
             ? \Hopeter1018\Helper\NamingConvention::urlPartsToMethod($getMethod)
@@ -294,54 +278,54 @@ final class FrameworkRouter
             \Hopeter1018\Helper\HttpResponse::addMessageUat($namespace, 'namespace');
             $controller = static::getRequestController($namespace);
             \Hopeter1018\Helper\HttpResponse::addMessageUat($controller, 'controller');
-            $uacCtrl = AnnotationHelper::classAnnoExtends($controller, UserAccessControl::CLASSNAME);
-            /* @var $uacCtrl UserAccessControl */
-            if ($uacCtrl == null or $uacCtrl->isAllowed()) {
-                $method = static::getRequestMethod();
-                $uacMethod = AnnotationHelper::methodAnnoExtends($controller, $method, UserAccessControl::CLASSNAME);
-                /* @var $uacMethod UserAccessControl */
-                if ($uacMethod == null or $uacMethod->isAllowed()) {
-                    $methodReturn = static::callControllerMethod($controller, $method);
-                    static::printMethodReturn($methodReturn);
-                    $returned = true;
+            $method = static::getRequestMethod();
+            if ($method !== null) {
+                $uacCtrl = AnnotationHelper::classAnnoExtends($controller, UserAccessControl::CLASSNAME);
+                /* @var $uacCtrl UserAccessControl */
+                if ($uacCtrl == null or $uacCtrl->isAllowed()) {
+                    $uacMethod = AnnotationHelper::methodAnnoExtends($controller, $method, UserAccessControl::CLASSNAME);
+                    /* @var $uacMethod UserAccessControl */
+                    if ($uacMethod == null or $uacMethod->isAllowed()) {
+                        $methodReturn = static::callControllerMethod($controller, $method);
+                        static::printMethodReturn($methodReturn);
+                        $returned = true;
+                    }
+                } else {
+                    header('Location: login.php');
+                    exit;
                 }
-            } else {
-                var_dump($uacCtrl->isAllowed());
-                var_dump($_SESSION);
-                echo('Location: login.php');
-                exit;
+            }
+
+            if ($returned === false) {
+                $config = static::$moduleConfigs[$namespace];
+                /* @var $config ReflectedClass */
+                $defaultTwig = $config->obj->getDefaultTwig();
+                static::publishAssets($config);
+
+                echo TwigGetter::getTemplate($defaultTwig)
+                    ->render(array(
+                        'bs' => array (
+                            'btn' => array (
+                                'd' => 'btn btn-sm btn-default',
+                                'p' => 'btn btn-sm btn-primary',
+                                'w' => 'btn btn-sm btn-warning',
+                                'i' => 'btn btn-sm btn-info',
+                                '_' => 'btn btn-sm',
+                            ),
+                            'fg' => 'form-group form-group-sm',
+                        ),
+                        "ctrl" => array(
+                            "title" => $config->obj->getDefaultManagerName(),
+                            "path" => $config->obj->getDefaultModuleName(),
+                        ),
+                        "_web_relative" => str_repeat('../', Path::depthRelativeTo(getcwd() . "/", APP_ROOT)),
+                        "_dir_" => dirname($defaultTwig) . "/",
+                        "_file_" => $defaultTwig,
+                        "_dir_relative_" => Path::relativeTo(dirname($defaultTwig), SystemPath::workbenchPath()) . '/',
+                    ));
             }
         } catch (\Exception $ex) {
             \Hopeter1018\Helper\HttpResponse::addMessage($ex->getMessage());
-        }
-
-        if ($returned === false) {
-            $config = static::$moduleConfigs[$namespace];
-            /* @var $config ReflectedClass */
-            $defaultTwig = $config->obj->getDefaultTwig();
-            static::publishAssets($config);
-
-            echo TwigGetter::getTemplate($defaultTwig)
-                ->render(array(
-                    'bs' => array (
-                        'btn' => array (
-                            'd' => 'btn btn-sm btn-default',
-                            'p' => 'btn btn-sm btn-primary',
-                            'w' => 'btn btn-sm btn-warning',
-                            'i' => 'btn btn-sm btn-info',
-                            '_' => 'btn btn-sm',
-                        ),
-                        'fg' => 'form-group form-group-sm',
-                    ),
-                    "ctrl" => array(
-                        "title" => $config->obj->getDefaultManagerName(),
-                        "path" => $config->obj->getDefaultModuleName(),
-                    ),
-                    "_web_relative" => str_repeat('../', Path::depthRelativeTo(getcwd() . "/", APP_ROOT)),
-                    "_dir_" => dirname($defaultTwig) . "/",
-                    "_file_" => $defaultTwig,
-                    "_dir_relative_" => Path::relativeTo(dirname($defaultTwig), SystemPath::workbenchPath()) . '/',
-                ));
         }
     }
 
