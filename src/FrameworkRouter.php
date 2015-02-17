@@ -279,10 +279,10 @@ final class FrameworkRouter
             $controller = static::getRequestController($namespace);
             \Hopeter1018\Helper\HttpResponse::addMessageUat($controller, 'controller');
             $method = static::getRequestMethod();
-            if ($method !== null) {
-                $uacCtrl = AnnotationHelper::classAnnoExtends($controller, UserAccessControl::CLASSNAME);
-                /* @var $uacCtrl UserAccessControl */
-                if ($uacCtrl == null or $uacCtrl->isAllowed()) {
+            $uacCtrl = AnnotationHelper::classAnnoExtends($controller, UserAccessControl::CLASSNAME);
+            /* @var $uacCtrl UserAccessControl */
+            if ($uacCtrl == null or $uacCtrl->isAllowed()) {
+                if ($method !== null) {
                     $uacMethod = AnnotationHelper::methodAnnoExtends($controller, $method, UserAccessControl::CLASSNAME);
                     /* @var $uacMethod UserAccessControl */
                     if ($uacMethod == null or $uacMethod->isAllowed()) {
@@ -290,10 +290,10 @@ final class FrameworkRouter
                         static::printMethodReturn($methodReturn);
                         $returned = true;
                     }
-                } else {
-                    header('Location: login.php');
-                    exit;
                 }
+            } else {
+                \Hopeter1018\Helper\HttpResponse::addMessageUat('access denied');
+                $uacCtrl->accessDenied();
             }
 
             if ($returned === false) {

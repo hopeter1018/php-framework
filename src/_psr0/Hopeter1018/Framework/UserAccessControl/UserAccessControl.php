@@ -25,6 +25,8 @@ abstract class UserAccessControl extends \Hopeter1018\Framework\SuperClass
      * @return boolean
      */
     abstract public function isAllowed();
+    
+    abstract public function accessDenied();
 
     const CLASSNAME = __CLASS__;
 
