@@ -88,6 +88,7 @@ abstract class LoginIdentity extends SuperClass implements ILoginIdentity
     {
         $result = static::LOGIN_STATUS_PLEASE_LOGIN;
         if ('logout' === filter_input(INPUT_SERVER, 'QUERY_STRING')) {
+            \Hopeter1018\Helper\HttpResponse::addMessageUat('logout');
             static::setLoggedId(null);
             $result = static::LOGIN_STATUS_LOGOUT;
         } elseif (static::isLogged()) {

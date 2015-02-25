@@ -279,21 +279,26 @@ final class FrameworkRouter
             $controller = static::getRequestController($namespace);
             \Hopeter1018\Helper\HttpResponse::addMessageUat($controller, 'controller');
             $method = static::getRequestMethod();
+            \Hopeter1018\Helper\HttpResponse::addMessageUat($method, 'method');
             $uacCtrl = AnnotationHelper::classAnnoExtends($controller, UserAccessControl::CLASSNAME);
+            \Hopeter1018\Helper\HttpResponse::addMessageUat($uacCtrl, 'uacCtrl');
             /* @var $uacCtrl UserAccessControl */
             if ($uacCtrl == null or $uacCtrl->isAllowed()) {
-                if ($method !== null) {
+                if (null !== $method) {
                     $uacMethod = AnnotationHelper::methodAnnoExtends($controller, $method, UserAccessControl::CLASSNAME);
                     /* @var $uacMethod UserAccessControl */
+                    \Hopeter1018\Helper\HttpResponse::addMessageUat($uacMethod, 'uacMethod');
+
                     if ($uacMethod == null or $uacMethod->isAllowed()) {
                         $methodReturn = static::callControllerMethod($controller, $method);
                         static::printMethodReturn($methodReturn);
                         $returned = true;
+                    } elseif (null !== $uacMethod) {
+                        $uacMethod->accessDenied($method);
                     }
                 }
-            } else {
-                \Hopeter1018\Helper\HttpResponse::addMessageUat('access denied');
-                $uacCtrl->accessDenied();
+            } elseif (null !== $uacCtrl) {
+                $uacCtrl->accessDenied($method);
             }
 
             if ($returned === false) {

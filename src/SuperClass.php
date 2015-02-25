@@ -17,9 +17,19 @@ namespace Hopeter1018\Framework;
 abstract class SuperClass
 {
 
+    protected static $reflected = array();
     public static function className()
     {
         return get_class(new static);
+    }
+
+    public static function reflFileName()
+    {
+        $staticClassName = static::className();
+        if (! isset(static::$reflected[$staticClassName])) {
+            static::$reflected[$staticClassName] = new \ReflectionClass(new static);
+        }
+        return static::$reflected[$staticClassName]->getFileName();
     }
 
 }
