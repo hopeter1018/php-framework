@@ -38,7 +38,7 @@ abstract class UserAccessControl extends LoginIdentity
     {
         if (null === $method) {
             $sessionSeg = new SessionSegment('uac');
-            $sessionSeg->set('REQUEST_URI', filter_input(INPUT_SERVER, "REQUEST_URI"));
+            $sessionSeg->set('REQUEST_URI', parse_url(filter_input(INPUT_SERVER, "REQUEST_URI"), PHP_URL_PATH));
 
             header('Location: login.php');
         } else {
