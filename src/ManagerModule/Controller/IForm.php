@@ -17,19 +17,4 @@ namespace Hopeter1018\Framework\ManagerModule\Controller;
 interface IForm
 {
 
-    /**
-     * Get the view/edit mode data
-     * 
-     * @return Returnable Description
-     */
-    public static function view();
-
-    /**
-     * Run the save action
-     * 
-     * @param mixed $data
-     * @return Returnable Description
-     */
-    public static function save($data);
-
 }
