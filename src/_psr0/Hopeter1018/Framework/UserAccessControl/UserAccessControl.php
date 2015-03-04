@@ -23,6 +23,8 @@ use Hopeter1018\Framework\SessionSegment;
 abstract class UserAccessControl extends LoginIdentity
 {
 
+    const LOGGED_URL = "dashboard.php";
+
     /**
      * The method body of doing the check
      * @throws \Exception
@@ -56,9 +58,12 @@ abstract class UserAccessControl extends LoginIdentity
     public static function processLogin()
     {
         $status = parent::processLogin();
-        if ($status === static::LOGIN_STATUS_LOGINSUCCESS) {
+        \Hopeter1018\Helper\HttpResponse::addMessageUat($status);
+        if ($status === static::LOGIN_STATUS_LOGINSUCCESS
+            or $status === static::LOGIN_STATUS_LOGGED
+        ) {
             $sessionSeg = new SessionSegment('uac');
-            $destLocation = "dashboard.php";
+            $destLocation = static::LOGGED_URL;
             if (null !== $sessionSeg->get("REQUEST_URI", $sessionSeg)) {
                 $destLocation = $sessionSeg->get("REQUEST_URI", $sessionSeg);
             }

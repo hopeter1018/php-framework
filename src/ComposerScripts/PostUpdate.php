@@ -38,7 +38,7 @@ final class PostUpdate implements IComposerScripts
 
     protected static function doPathChmod($path)
     {
-		is_dir($path) or mkdir($path, 0777, true);
+        is_dir($path) or mkdir($path, 0777, true);
         chmod($path, 0777);
         if (! \Hopeter1018\FileOperation\DirectoryOperation::isDirWritable($path)) {
             echo "-   Error: Path not writable. ({$path})";

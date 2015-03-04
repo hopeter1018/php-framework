@@ -173,7 +173,7 @@ final class FrameworkRouter
                 \Hopeter1018\Helper\HttpResponse::addMessageUat($param->getName(), '$param');
                 \Hopeter1018\Helper\HttpResponse::addMessageUat($methodParam, '$methodParam');
                 \Hopeter1018\Helper\HttpResponse::addMessageUat($request, '$request');
-                throw new FrameworkRouterException("Invalid request");
+                throw new FrameworkRouterException("Invalid request: " . $method->getName());
             }
         }
         return $invokeArgs;
@@ -190,6 +190,7 @@ final class FrameworkRouter
      */
     private static function callControllerMethod($controllerName, $methodName)
     {
+        \Hopeter1018\Helper\HttpResponse::addMessageUat('callControllerMethod');
         $refl = new \ReflectionClass($controllerName);
         $method = $refl->getMethod($methodName);
         $request = \Hopeter1018\AngularjsPostbackValidator\WebRequest::getRequestParams();
@@ -323,6 +324,12 @@ final class FrameworkRouter
                             "title" => $config->obj->getDefaultManagerName(),
                             "path" => $config->obj->getDefaultModuleName(),
                         ),
+                        "hkcFrameworkRoute" => array(
+                            "keys" => array(static::GET_NAMESPACE, static::GET_CONTROLLER, static::GET_METHOD),
+                            static::GET_NAMESPACE => filter_input(INPUT_GET, static::GET_NAMESPACE),
+                            static::GET_CONTROLLER => filter_input(INPUT_GET, static::GET_CONTROLLER),
+                            static::GET_METHOD => filter_input(INPUT_GET, static::GET_METHOD),
+                        ),
                         "_web_relative" => str_repeat('../', Path::depthRelativeTo(getcwd() . "/", APP_ROOT)),
                         "_dir_" => dirname($defaultTwig) . "/",
                         "_file_" => $defaultTwig,
@@ -331,6 +338,10 @@ final class FrameworkRouter
             }
         } catch (\Exception $ex) {
             \Hopeter1018\Helper\HttpResponse::addMessage($ex->getMessage());
+            //  TODO handle routing exception
+            error_log($ex->getMessage() . "\r\n" . $ex->getTraceAsString());
+            header('Location: login.php?exception');
+            exit;
         }
     }
 
