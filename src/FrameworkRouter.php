@@ -51,11 +51,9 @@ final class FrameworkRouter
     private static function debugRequestNamespace($namespace)
     {
         if ($namespace === null and APP_IS_UAT) {
-            if (!isset($_GET[static::GET_NAMESPACE])) {
+            if (null === ($getNamespace = filter_input(INPUT_GET, static::GET_NAMESPACE))) {
                 throw new FrameworkRouterException("No parameter for 'Namespace' (\$_GET: " . static::GET_NAMESPACE . ") passed.");
-            } elseif (!array_key_exists($_GET[static::GET_NAMESPACE], static::$moduleConfigs)) {
-                \Hopeter1018\Helper\HttpResponse::addMessageUat(static::$moduleConfigs, 'static::$moduleConfigs');
-                \Hopeter1018\Helper\HttpResponse::addMessageUat($_GET[static::GET_NAMESPACE], '_GET');
+            } elseif (!array_key_exists($getNamespace, static::$moduleConfigs)) {
                 throw new FrameworkRouterException("Parameter for 'Namespace' (\$_GET: " . static::GET_NAMESPACE . ") not registered.");
             } elseif (count(static::$moduleConfigs) === 0) {
                 throw new FrameworkRouterException("No module registered.");
@@ -75,8 +73,8 @@ final class FrameworkRouter
     private static function getRequestNamespace()
     {
         $namespace = null;
-        if (isset($_GET[static::GET_NAMESPACE]) and array_key_exists($_GET[static::GET_NAMESPACE], static::$moduleConfigs)) {
-            $namespace = $_GET[static::GET_NAMESPACE];
+        if (null !== ($getNamespace = filter_input(INPUT_GET, static::GET_NAMESPACE)) and array_key_exists($getNamespace, static::$moduleConfigs)) {
+            $namespace = $getNamespace;
         } elseif (count(static::$moduleConfigs) === 1) {
             $keys = array_keys(static::$moduleConfigs);
             $namespace = $keys[0];
@@ -91,10 +89,10 @@ final class FrameworkRouter
      * @param type $namespacedCtrlName
      * @throws FrameworkRouterException
      */
-    private static function debugRequestCOntrollerName($namespacedCtrlName)
+    private static function debugRequestControllerName($namespacedCtrlName)
     {
         if ($namespacedCtrlName === null and APP_IS_UAT) {
-            if (!isset($_GET[static::GET_CONTROLLER])) {
+            if (null === filter_input(INPUT_GET, static::GET_CONTROLLER)) {
                 throw new FrameworkRouterException("No parameter for 'Controller' (\$_GET: " . static::GET_CONTROLLER . ") passed.");
             } elseif ($namespacedCtrlName !== '') {
                 throw new FrameworkRouterException("Parameter for 'Controller' (\$_GET: " . static::GET_CONTROLLER . ") not registered.");
@@ -115,20 +113,14 @@ final class FrameworkRouter
      */
     private static function getRequestController($namespace)
     {
-        $namespacedCtrlName = null;
-        if (null !== ($getController = filter_input(INPUT_GET, static::GET_CONTROLLER))) {
-            $ctrlName = \Hopeter1018\Helper\NamingConvention::urlPartsToController($getController);
-        } else {
-            $ctrlName = \Hopeter1018\Helper\NamingConvention::urlPartsToController($namespace) . 'Ctrl';
-//            $ctrlName = \Hopeter1018\Helper\NamingConvention::urlPartsToController(pathinfo(parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI'), PHP_URL_PATH), PATHINFO_FILENAME))
-//                . 'Ctrl';
-        }
+        $ctrlName = \Hopeter1018\Helper\NamingConvention::urlPartsToController(
+            filter_input(INPUT_GET, static::GET_CONTROLLER, FILTER_SANITIZE_STRING, array('options' => array('default' => "$namespace-ctrl")))
+        );
         $config = static::$moduleConfigs[$namespace];
         $namespacedCtrlName = $config->refl->getNamespaceName() . "\\" . $ctrlName;
-        $ctrl = (class_exists($namespacedCtrlName)) ? $namespacedCtrlName : null;
 
-        static::debugRequestCOntrollerName($namespacedCtrlName);
-        return $ctrl;
+        static::debugRequestControllerName($namespacedCtrlName);
+        return (class_exists($namespacedCtrlName)) ? $namespacedCtrlName : null;
     }
 
     /**
@@ -158,22 +150,17 @@ final class FrameworkRouter
     {
         $invokeArgs = array ();
         $methodParam = $method->getParameters();
-        $total = count($methodParam);
+//        $total = count($methodParam);
         foreach ($methodParam as $index => $param) {
             /* @var $param \ReflectionParameter */
-            if (($total - 1) === $index and $param->getName() === 'data') {
+            if (0 === $index and $param->getName() === 'data') {
                 $invokeArgs[] = $request;
-            } elseif (isset($request) and isset($request->{$param->getName()})) {
-                $invokeArgs[] = $request->{$param->getName()};
             } elseif (isset($request->data) and isset($request->data->{$param->getName()})) {
                 $invokeArgs[] = $request->data->{$param->getName()};
             } elseif (isset($request->data->record) and isset($request->data->record->{$param->getName()})) {
                 $invokeArgs[] = $request->data->record->{$param->getName()};
             } elseif (!$param->isOptional()) {
-                \Hopeter1018\Helper\HttpResponse::addMessageUat($param->getName(), '$param');
-                \Hopeter1018\Helper\HttpResponse::addMessageUat($methodParam, '$methodParam');
-                \Hopeter1018\Helper\HttpResponse::addMessageUat($request, '$request');
-                throw new FrameworkRouterException("Invalid request: " . $method->getName());
+                throw new FrameworkRouterException("Invalid request: " . $method->getName() . ' - ' . $param->getName());
             }
         }
         return $invokeArgs;
@@ -190,20 +177,14 @@ final class FrameworkRouter
      */
     private static function callControllerMethod($controllerName, $methodName)
     {
-        \Hopeter1018\Helper\HttpResponse::addMessageUat('callControllerMethod');
         $refl = new \ReflectionClass($controllerName);
         $method = $refl->getMethod($methodName);
-        $request = \Hopeter1018\AngularjsPostbackValidator\WebRequest::getRequestParams();
-        $invokeArgs = static::getMethodInvokeArgs($request, $method);
         if (! $method->isStatic()) {
-            $data = $method->invokeArgs(new $controllerName, $invokeArgs);
-        } else {
-            
+            $data = $method->invokeArgs(new $controllerName, static::getMethodInvokeArgs(\Hopeter1018\Helper\HttpRequest::getRequestParams(), $method));
         }
-
         return array(
             "data" => $data,
-//                "csrf" => \Hopeter1018\Helper\HttpR
+            "csrf" => \Hopeter1018\Helper\Csrf::getToken(),
         );
     }
 
@@ -312,11 +293,12 @@ final class FrameworkRouter
                     ->render(array(
                         'bs' => array (
                             'btn' => array (
-                                'd' => 'btn btn-sm btn-default',
+                                '_' => 'btn btn-sm btn-default',
                                 'p' => 'btn btn-sm btn-primary',
-                                'w' => 'btn btn-sm btn-warning',
+                                's' => 'btn btn-sm btn-success',
                                 'i' => 'btn btn-sm btn-info',
-                                '_' => 'btn btn-sm',
+                                'w' => 'btn btn-sm btn-warning',
+                                'd' => 'btn btn-sm btn-danger',
                             ),
                             'fg' => 'form-group form-group-sm',
                         ),
@@ -340,7 +322,8 @@ final class FrameworkRouter
             \Hopeter1018\Helper\HttpResponse::addMessage($ex->getMessage());
             //  TODO handle routing exception
             error_log($ex->getMessage() . "\r\n" . $ex->getTraceAsString());
-            header('Location: login.php?exception');
+            \Hopeter1018\Helper\HttpResponse::setErrorMessage($ex->getMessage());
+//            header('Location: login.php?exception');
             exit;
         }
     }

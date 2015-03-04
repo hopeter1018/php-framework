@@ -69,7 +69,7 @@ abstract class LoginIdentity extends SuperClass implements ILoginIdentity
     public static function isPostLogin()
     {
         if ('POST' === filter_input(INPUT_SERVER, 'REQUEST_METHOD')
-            and is_object($posted = \Hopeter1018\AngularjsPostbackValidator\WebRequest::getRequestParams())
+            and is_object($posted = \Hopeter1018\Helper\HttpRequest::getRequestParams())
             and isset($posted->login)
             and isset($posted->password)
             and isset($posted->captcha)
