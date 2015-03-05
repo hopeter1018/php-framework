@@ -29,4 +29,15 @@ class Anonymous extends UserAccessControl
         return true;
     }
 
+    /**
+     * 
+     * @param string $login
+     * @param string $password
+     * @return boolean
+     */
+    public static function checkLoginPassword($login, $password)
+    {
+        return true;
+    }
+
 }
