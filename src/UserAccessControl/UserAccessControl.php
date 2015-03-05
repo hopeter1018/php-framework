@@ -9,7 +9,6 @@
 namespace Hopeter1018\Framework\UserAccessControl;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Hopeter1018\Framework\LoginIdentity;
 use Hopeter1018\Framework\SessionSegment;
 
 /**

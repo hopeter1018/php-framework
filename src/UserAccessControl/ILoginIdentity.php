@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Hopeter1018\Framework;
+namespace Hopeter1018\Framework\UserAccessControl;
 
 /**
  * Description of ILoginIdentity
