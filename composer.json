@@ -31,9 +31,6 @@
     "autoload": {
         "psr-4": {
             "Hopeter1018\\Framework\\": "src"
-        },
-        "psr-0": {
-            "Hopeter1018\\Framework\\": "src/_psr0/"
         }
     }
 }
