@@ -18,10 +18,9 @@
         "hopeter1018/twig-extension": "dev-master",
         "hopeter1018/extension-helper": "dev-master",
 
-        "symfony/yaml": "2.*",
-        "symfony/filesystem": "2.6.*@dev",
-        "symfony/finder": "2.6.*@dev",
-        "doctrine/orm": "2.4.*@dev",
+        "symfony/yaml": "2.7.*@dev",
+        "symfony/filesystem": "2.7.*@dev",
+        "symfony/finder": "2.7.*@dev",
         "twig/twig": "1.*",
         "nesbot/Carbon": "*"
     },
