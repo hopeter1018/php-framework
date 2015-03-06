@@ -9,7 +9,7 @@
 namespace Hopeter1018\Framework\Enum;
 
 use MabeEnum\Enum;
-use ReflectionClass;
+//use ReflectionClass;
 
 /**
  * Extended version of marc-mabe/php-enum for framework uses
@@ -45,9 +45,7 @@ class FrameworkEnum extends Enum
         foreach ($constants as $constantName => $value) {
             $option[] = array(
                 "id" => $value,
-                "value" => (isset(static::$captions[ $value ]))
-                    ? static::$captions[$value]
-                    : $constantName,
+                "value" => (isset(static::$captions[ $value ])) ? static::$captions[$value] : $constantName,
             );
         }
         return $option;
