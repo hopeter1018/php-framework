@@ -6,7 +6,10 @@
  * and open the template in the editor.
  */
 
-namespace Hopeter1018\Framework;
+namespace Hopeter1018\Framework\UserAccessControl;
+
+use Hopeter1018\Framework\SuperClass;
+use Hopeter1018\Framework\SessionSegment;
 
 /**
  * Description of LoginIdentity

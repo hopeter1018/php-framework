@@ -16,13 +16,14 @@
         "hopeter1018/angularjs-postback-validator": "dev-master",
         "hopeter1018/developer-tool": "dev-master",
         "hopeter1018/twig-extension": "dev-master",
-
-        "symfony/yaml": "2.6.*@dev",
-        "symfony/filesystem": "2.6.*@dev",
-        "symfony/finder": "2.6.*@dev",
+        "hopeter1018/extension-helper": "dev-master",
+        "symfony/yaml": "2.7.*@dev",
+        "symfony/filesystem": "2.7.*@dev",
+        "symfony/finder": "2.7.*@dev",
         "doctrine/orm": "2.4.*@dev",
         "twig/twig": "1.*",
-        "nesbot/Carbon": "*"
+        "nesbot/Carbon": "*",
+        "marc-mabe/php-enum": "2.0.*@dev"
     },
     "suggest": {
         "monolog/monolog": "Allows more advanced logging of the application flow",
@@ -31,9 +32,6 @@
     "autoload": {
         "psr-4": {
             "Hopeter1018\\Framework\\": "src"
-        },
-        "psr-0": {
-            "Hopeter1018\\Framework\\": "src/_psr0/"
         }
     }
 }

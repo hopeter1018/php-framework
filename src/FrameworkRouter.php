@@ -153,8 +153,10 @@ final class FrameworkRouter
 //        $total = count($methodParam);
         foreach ($methodParam as $index => $param) {
             /* @var $param \ReflectionParameter */
-            if (0 === $index and $param->getName() === 'data') {
+            if ($param->getName() === 'data') {
                 $invokeArgs[] = $request;
+            } elseif (isset($request) and isset($request->{$param->getName()})) {
+                $invokeArgs[] = $request->{$param->getName()};
             } elseif (isset($request->data) and isset($request->data->{$param->getName()})) {
                 $invokeArgs[] = $request->data->{$param->getName()};
             } elseif (isset($request->data->record) and isset($request->data->record->{$param->getName()})) {

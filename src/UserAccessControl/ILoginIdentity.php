@@ -6,26 +6,24 @@
  * and open the template in the editor.
  */
 
-namespace Hopeter1018\Framework\RoutingProcess;
+namespace Hopeter1018\Framework\UserAccessControl;
 
 /**
- * Description of RoutingProcess
- * Annotations !
- * 
+ * Description of ILoginIdentity
+ *
  * @version $id$
  * @author peter.ho
  */
-abstract class RoutingProcess extends \Hopeter1018\Framework\SuperClass
+interface ILoginIdentity
 {
 
-
     /**
+     * Put logic of database here
      * 
-     * @throws \Exception
+     * @param string $login
+     * @param string $password
      * @return boolean
      */
-    abstract public function invoke();
-
-    const CLASSNAME = __CLASS__;
+    public static function checkLoginPassword($login, $password);
 
 }
