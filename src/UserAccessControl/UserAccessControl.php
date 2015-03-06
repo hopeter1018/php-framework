@@ -45,7 +45,7 @@ abstract class UserAccessControl extends LoginIdentity
                     $parsed['query'] = '';
                 }
 
-                $sessionSeg->set('REQUEST_URI', http_build_query($parsed));
+                $sessionSeg->set('REQUEST_URI', $parsed['path'] . "?" . http_build_query($parsed));
             }
             header('Location: login.php');
         } else {
