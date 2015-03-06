@@ -6,9 +6,10 @@
  * and open the template in the editor.
  */
 
-namespace Hopeter1018\Framework;
+namespace Hopeter1018\Framework\Enum;
 
 use MabeEnum\Enum;
+use ReflectionClass;
 
 /**
  * Extended version of marc-mabe/php-enum for framework uses
@@ -20,14 +21,24 @@ use MabeEnum\Enum;
 class FrameworkEnum extends Enum
 {
 
-    public static function getAll()
-    {
-        return static::getConstants();
-    }
+//    public static function getAll()
+//    {
+//        $refl = new ReflectionClass(get_called_class());
+//        $constants = $refl->getConstants();
+//        $constDoc = new ReflectionConst(get_called_class());
+//        EnumConstAnnotation::registerAnnotation();
+//
+//        foreach ($constants as $constantName => $value) {
+//            $constDoc = new ReflectionConst(get_called_class(), $constantName);
+////            $docComment = $constDoc->getDocComment($constantName);
+//            \Hopeter1018\DoctrineExtension\AnnotationHelper::byProperty(get_called_class(), $constantName);
+//            echo "<hr />";
+//        }
+//    }
 
     protected static $captions = array();
     protected static $option = array();
-    public static function toOptions()
+    public static function asOption()
     {
         $constants = static::getConstants();
         $option = array();
