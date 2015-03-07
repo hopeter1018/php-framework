@@ -38,6 +38,17 @@ final class SystemPath
     }
 
     /**
+     * Return the absolute path under []
+     * 
+     * @param string $path Path relative to storage
+     * @return string
+     */
+    public static function rootPath($path = '')
+    {
+        return Path::concatPath(APP_ROOT, $path);
+    }
+
+    /**
      * Return the absolute path under [workbench/]
      * 
      * @param string $path Path relative to workbench

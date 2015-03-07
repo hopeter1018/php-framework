@@ -181,6 +181,9 @@ final class FrameworkRouter
     {
         $refl = new \ReflectionClass($controllerName);
         $method = $refl->getMethod($methodName);
+        if ($methodName === 'save') {
+            \Hopeter1018\Helper\HttpResponse::addMessageDev($controllerName . '\\' . $methodName, 'callCtrlMethod');
+        }
         if (! $method->isStatic()) {
             $data = $method->invokeArgs(new $controllerName, static::getMethodInvokeArgs(\Hopeter1018\Helper\HttpRequest::getRequestParams(), $method));
         }
