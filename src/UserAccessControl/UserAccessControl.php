@@ -44,8 +44,7 @@ abstract class UserAccessControl extends LoginIdentity
                 if (isset($parsed['query']) and $parsed['query'] === 'logout') {
                     $parsed['query'] = '';
                 }
-
-                $sessionSeg->set('REQUEST_URI', $parsed['path'] . "?" . http_build_query($parsed));
+                $sessionSeg->set('REQUEST_URI', $parsed['path'] . "?" . $parsed['query']);
             }
             header('Location: login.php');
         } else {
@@ -57,7 +56,7 @@ abstract class UserAccessControl extends LoginIdentity
     public static function processLogin()
     {
         $status = parent::processLogin();
-        \Hopeter1018\Helper\HttpResponse::addMessageUat($status);
+//        \Hopeter1018\Helper\HttpResponse::addMessageUat($status);
         if ($status === static::LOGIN_STATUS_LOGINSUCCESS
             or $status === static::LOGIN_STATUS_LOGGED
         ) {
@@ -66,7 +65,13 @@ abstract class UserAccessControl extends LoginIdentity
             if (null !== $sessionSeg->get("REQUEST_URI", $sessionSeg)) {
                 $destLocation = $sessionSeg->get("REQUEST_URI", $sessionSeg);
             }
-            header("Location: {$destLocation}");
+            $sessionSeg->remove('REQUEST_URI');
+
+            if (\Hopeter1018\Helper\HttpRequest::has('hkc-login')) {
+                header("hkc-uac: {$destLocation}");
+            } else {
+                header("Location: {$destLocation}");
+            }
             exit;
         }
     }

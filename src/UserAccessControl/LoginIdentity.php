@@ -83,6 +83,17 @@ abstract class LoginIdentity extends SuperClass implements ILoginIdentity
         }
     }
 
+    public static function processLogout()
+    {
+        if ('logout' === filter_input(INPUT_SERVER, 'QUERY_STRING')
+            or null !== filter_input(INPUT_GET, 'logout')
+        ) {
+            static::setLoggedId(null);
+            header('Location: login.php');
+            exit;
+        }
+    }
+
     /**
      * 
      * @return int static::LOGIN_STATUS_*
