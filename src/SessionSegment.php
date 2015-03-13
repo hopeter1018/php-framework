@@ -54,7 +54,7 @@ final class SessionSegment implements \ArrayAccess
     private function checkInit()
     {
         if (static::$projectName === null) {
-            throw new Exception('Please do SessionSegment::register');
+            throw new \Exception('Please do SessionSegment::register');
         }
     }
 

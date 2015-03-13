@@ -78,7 +78,7 @@ final class SystemPath
      */
     public static function assetsPath()
     {
-        return APP_ROOT . Path::concatPath(static::ASSETS, func_get_args());
+        return ((defined('APP_ASSETS_IN_WCMS') && true === APP_ASSETS_IN_WCMS) ? APP_WCMS_ROOT : APP_ROOT) . Path::concatPath(static::ASSETS, func_get_args());
     }
 
     /**

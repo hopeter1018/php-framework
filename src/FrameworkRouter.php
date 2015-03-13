@@ -118,7 +118,9 @@ final class FrameworkRouter
         );
         $config = static::$moduleConfigs[$namespace];
         $namespacedCtrlName = $config->refl->getNamespaceName() . "\\" . $ctrlName;
-
+//        \Hopeter1018\Helper\HttpResponse::addMessageDev($namespace, '$namespace');
+//        \Hopeter1018\Helper\HttpResponse::addMessageDev($ctrlName, '$ctrlName');
+//        \Hopeter1018\Helper\HttpResponse::addMessageDev($namespacedCtrlName, '$namespacedCtrlName');
         static::debugRequestControllerName($namespacedCtrlName);
         return (class_exists($namespacedCtrlName)) ? $namespacedCtrlName : null;
     }
@@ -234,6 +236,7 @@ final class FrameworkRouter
     {
         static $subs = array('css/', 'js/');
         $assetsRoot = $config->obj->getPathAssets();
+        \Hopeter1018\Helper\HttpResponse::addMessageUat($assetsRoot, 'publishAssets');
         foreach ($subs as $subFolder) {
             if (is_dir($assetsRoot . $subFolder)) {
                 \Hopeter1018\FileOperation\DirectoryOperation::copy(
