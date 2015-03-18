@@ -14,7 +14,6 @@
         "hopeter1018/doctrine-extension": "dev-master",
         "hopeter1018/file-operation": "dev-master",
         "hopeter1018/angularjs-postback-validator": "dev-master",
-        "hopeter1018/developer-tool": "dev-master",
         "hopeter1018/twig-extension": "dev-master",
         "hopeter1018/extension-helper": "dev-master",
 
@@ -25,6 +24,9 @@
         "twig/twig": "1.*",
         "nesbot/Carbon": "*",
         "marc-mabe/php-enum": "2.0.*@dev"
+    },
+    "require-dev": {
+        "hopeter1018/developer-tool": "dev-master"
     },
     "suggest": {
         "monolog/monolog": "Allows more advanced logging of the application flow",
