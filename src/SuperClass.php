@@ -23,6 +23,16 @@ abstract class SuperClass
         return get_class(new static);
     }
 
+    public static function classNameWithoutNamespace()
+    {
+        return strrchr(static::className(), "\\");
+    }
+
+    public static function classHash()
+    {
+        $md5 = md5(static::className());
+        return substr($md5, 0, 8) . '-' . substr($md5, 8, 4) . '-' . substr($md5, 12, 4) . '-' . substr($md5, 16, 4) . '-' . substr($md5, 20, 12);
+    }
     public static function reflFileName()
     {
         $staticClassName = static::className();
@@ -32,4 +42,18 @@ abstract class SuperClass
         return static::$reflected[$staticClassName]->getFileName();
     }
 
+    private $hash = null;
+
+    public function __construct()
+    {
+        $this->hash = substr(md5(time()), 0, 6);
+    }
+    
+    public function __toString()
+    {
+        if ($this->hash === null) {
+            error_log(static::className() . "::__construct; doesn't called SuperClass::__construct();");
+        }
+        return static::className() . "@{$this->hash}";
+    }
 }

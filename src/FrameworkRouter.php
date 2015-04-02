@@ -17,6 +17,11 @@ use Hopeter1018\DoctrineExtension\AnnotationHelper;
 use Hopeter1018\Framework\UserAccessControl\UserAccessControl;
 use Hopeter1018\TwigExtension\TwigGetter;
 use Hopeter1018\FileOperation\Path;
+use Hopeter1018\Helper\NamingConvention;
+use Hopeter1018\Helper\HttpResponse;
+use Hopeter1018\Helper\Csrf;
+use Hopeter1018\FileOperation\DirectoryOperation;
+use Hopeter1018\Framework\ModuleConfigure;
 
 /**
  * Description of FrameworkRouter
@@ -113,14 +118,11 @@ final class FrameworkRouter
      */
     private static function getRequestController($namespace)
     {
-        $ctrlName = \Hopeter1018\Helper\NamingConvention::urlPartsToController(
+        $ctrlName = NamingConvention::urlPartsToController(
             filter_input(INPUT_GET, static::GET_CONTROLLER, FILTER_SANITIZE_STRING, array('options' => array('default' => "$namespace-ctrl")))
         );
         $config = static::$moduleConfigs[$namespace];
         $namespacedCtrlName = $config->refl->getNamespaceName() . "\\" . $ctrlName;
-//        \Hopeter1018\Helper\HttpResponse::addMessageDev($namespace, '$namespace');
-//        \Hopeter1018\Helper\HttpResponse::addMessageDev($ctrlName, '$ctrlName');
-//        \Hopeter1018\Helper\HttpResponse::addMessageDev($namespacedCtrlName, '$namespacedCtrlName');
         static::debugRequestControllerName($namespacedCtrlName);
         return (class_exists($namespacedCtrlName)) ? $namespacedCtrlName : null;
     }
@@ -133,7 +135,7 @@ final class FrameworkRouter
     {
         $getMethod = filter_input(INPUT_GET, static::GET_METHOD);
         return (null !== $getMethod)
-            ? \Hopeter1018\Helper\NamingConvention::urlPartsToMethod($getMethod)
+            ? NamingConvention::urlPartsToMethod($getMethod)
             : null;
     }
 
@@ -184,14 +186,14 @@ final class FrameworkRouter
         $refl = new \ReflectionClass($controllerName);
         $method = $refl->getMethod($methodName);
         if ($methodName === 'save') {
-            \Hopeter1018\Helper\HttpResponse::addMessageDev($controllerName . '\\' . $methodName, 'callCtrlMethod');
+            HttpResponse::addMessageDev($controllerName . '\\' . $methodName, 'callCtrlMethod');
         }
         if (! $method->isStatic()) {
-            $data = $method->invokeArgs(new $controllerName, static::getMethodInvokeArgs(\Hopeter1018\Helper\HttpRequest::getRequestParams(), $method));
+            $data = $method->invokeArgs(new $controllerName, static::getMethodInvokeArgs(HttpRequest::getRequestParams(), $method));
         }
         return array(
-            "data" => $data,
-            "csrf" => \Hopeter1018\Helper\Csrf::getToken(),
+            "data" => (isset($data) ? $data : null),
+            "csrf" => Csrf::getToken(),
         );
     }
 
@@ -236,10 +238,10 @@ final class FrameworkRouter
     {
         static $subs = array('css/', 'js/');
         $assetsRoot = $config->obj->getPathAssets();
-        \Hopeter1018\Helper\HttpResponse::addMessageUat($assetsRoot, 'publishAssets');
+        HttpResponse::addMessageUat($assetsRoot, 'publishAssets');
         foreach ($subs as $subFolder) {
             if (is_dir($assetsRoot . $subFolder)) {
-                \Hopeter1018\FileOperation\DirectoryOperation::copy(
+                DirectoryOperation::copy(
                     $assetsRoot . $subFolder,
                     SystemPath::assetsPath($subFolder, "packages", $config->obj->getDefaultModuleName())
                 );
@@ -265,19 +267,19 @@ final class FrameworkRouter
         $returned = false;
         try {
             $namespace = static::getRequestNamespace();
-            \Hopeter1018\Helper\HttpResponse::addMessageUat($namespace, 'namespace');
+            HttpResponse::addMessageUat($namespace, 'namespace');
             $controller = static::getRequestController($namespace);
-            \Hopeter1018\Helper\HttpResponse::addMessageUat($controller, 'controller');
+            HttpResponse::addMessageUat($controller, 'controller');
             $method = static::getRequestMethod();
-            \Hopeter1018\Helper\HttpResponse::addMessageUat($method, 'method');
+            HttpResponse::addMessageUat($method, 'method');
             $uacCtrl = AnnotationHelper::classAnnoExtends($controller, UserAccessControl::CLASSNAME);
-            \Hopeter1018\Helper\HttpResponse::addMessageUat($uacCtrl, 'uacCtrl');
+            HttpResponse::addMessageUat($uacCtrl, 'uacCtrl');
             /* @var $uacCtrl UserAccessControl */
             if ($uacCtrl == null or $uacCtrl->isAllowed()) {
                 if (null !== $method) {
                     $uacMethod = AnnotationHelper::methodAnnoExtends($controller, $method, UserAccessControl::CLASSNAME);
                     /* @var $uacMethod UserAccessControl */
-                    \Hopeter1018\Helper\HttpResponse::addMessageUat($uacMethod, 'uacMethod');
+                    HttpResponse::addMessageUat($uacMethod, 'uacMethod');
 
                     if ($uacMethod == null or $uacMethod->isAllowed()) {
                         $methodReturn = static::callControllerMethod($controller, $method);
@@ -327,10 +329,10 @@ final class FrameworkRouter
                     ));
             }
         } catch (\Exception $ex) {
-            \Hopeter1018\Helper\HttpResponse::addMessage($ex->getMessage());
+            HttpResponse::addMessage($ex->getMessage());
             //  TODO handle routing exception
             error_log($ex->getMessage() . "\r\n" . $ex->getTraceAsString());
-            \Hopeter1018\Helper\HttpResponse::setErrorMessage($ex->getMessage());
+            HttpResponse::setErrorMessage($ex->getMessage());
 //            header('Location: login.php?exception');
             exit;
         }
@@ -358,7 +360,7 @@ final class FrameworkRouter
      * Reflect all controller in the namespace to build up the routes
      * 
      * @todo build up a mapping php for the Module to enhance the "start" method
-     * @param \Hopeter1018\Framework\ModuleConfigure $config
+     * @param ModuleConfigure $config
      */
     public static function buildRoutes(ModuleConfigure $config)
     {
