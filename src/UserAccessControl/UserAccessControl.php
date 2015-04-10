@@ -10,6 +10,7 @@ namespace Hopeter1018\Framework\UserAccessControl;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Hopeter1018\Framework\SessionSegment;
+use Hopeter1018\Helper\HttpRequest;
 
 /**
  * Abstract class UserAccessControl
@@ -67,7 +68,7 @@ abstract class UserAccessControl extends LoginIdentity
             }
             $sessionSeg->remove('REQUEST_URI');
 
-            if (\Hopeter1018\Helper\HttpRequest::has('hkc-login')) {
+            if (HttpRequest::has('hkc-login')) {
                 header("hkc-uac: {$destLocation}");
             } else {
                 header("Location: {$destLocation}");

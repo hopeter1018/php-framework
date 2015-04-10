@@ -19,9 +19,9 @@ use Hopeter1018\TwigExtension\TwigGetter;
 use Hopeter1018\FileOperation\Path;
 use Hopeter1018\Helper\NamingConvention;
 use Hopeter1018\Helper\HttpResponse;
+use Hopeter1018\Helper\HttpRequest;
 use Hopeter1018\Helper\Csrf;
 use Hopeter1018\FileOperation\DirectoryOperation;
-use Hopeter1018\Framework\ModuleConfigure;
 
 /**
  * Description of FrameworkRouter
@@ -238,7 +238,7 @@ final class FrameworkRouter
     {
         static $subs = array('css/', 'js/');
         $assetsRoot = $config->obj->getPathAssets();
-        HttpResponse::addMessageUat($assetsRoot, 'publishAssets');
+//        HttpResponse::addMessageUat($assetsRoot, 'publishAssets');
         foreach ($subs as $subFolder) {
             if (is_dir($assetsRoot . $subFolder)) {
                 DirectoryOperation::copy(
