@@ -54,10 +54,10 @@ abstract class UserAccessControl extends LoginIdentity
         exit;
     }
 
-    public static function processLogin()
+    public static function processLoginRedirect()
     {
         $status = parent::processLogin();
-//        \Hopeter1018\Helper\HttpResponse::addMessageUat($status);
+        \Hopeter1018\Helper\HttpResponse::addMessageUat($status, "processLoginRedirect: Status");
         if ($status === static::LOGIN_STATUS_LOGINSUCCESS
             or $status === static::LOGIN_STATUS_LOGGED
         ) {

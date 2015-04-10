@@ -276,6 +276,7 @@ final class FrameworkRouter
             HttpResponse::addMessageUat($uacCtrl, 'uacCtrl');
             /* @var $uacCtrl UserAccessControl */
             if ($uacCtrl == null or $uacCtrl->isAllowed()) {
+                HttpResponse::addMessageUat('isAllowed', 'uacCtrl');
                 if (null !== $method) {
                     $uacMethod = AnnotationHelper::methodAnnoExtends($controller, $method, UserAccessControl::CLASSNAME);
                     /* @var $uacMethod UserAccessControl */
@@ -290,6 +291,7 @@ final class FrameworkRouter
                     }
                 }
             } elseif (null !== $uacCtrl) {
+                HttpResponse::addMessageUat('accessDenied', 'uacCtrl');
                 $uacCtrl->accessDenied($method);
             }
 

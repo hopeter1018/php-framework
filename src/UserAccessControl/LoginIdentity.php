@@ -8,6 +8,7 @@
 
 namespace Hopeter1018\Framework\UserAccessControl;
 
+use Hopeter1018\Helper\HttpResponse;
 use Hopeter1018\Framework\SuperClass;
 use Hopeter1018\Framework\SessionSegment;
 
@@ -94,6 +95,8 @@ abstract class LoginIdentity extends SuperClass implements ILoginIdentity
         }
     }
 
+    protected static function processLoginRedirect(){}
+
     /**
      * 
      * @return int static::LOGIN_STATUS_*
@@ -115,8 +118,12 @@ abstract class LoginIdentity extends SuperClass implements ILoginIdentity
                 $result = ((static::$posted->captcha === $_SESSION['captcha'])
                     ? static::checkLoginPassword(static::$posted->login, static::$posted->password)
                     : static::LOGIN_STATUS_CAPTCHA);
+                HttpResponse::addMessageUat($result, 'processLogin.$result');
+                if ($result === static::LOGIN_STATUS_LOGINSUCCESS) {
+                    static::processLoginRedirect();
+                }
             } catch (\Exception $ex) {
-                $result = static::LOGIN_STATUS_CSRF;
+                $result = static::LOGIN_STATUS_INCORRECT;
             }
         }
 
