@@ -34,7 +34,7 @@ final class SystemPath
      */
     public static function storagePath($path = '')
     {
-        return Path::concatPath(APP_SYSTEM_STORAGE, $path);
+        return Path::rootConcatPath(APP_SYSTEM_STORAGE, $path);
     }
 
     /**
@@ -45,7 +45,7 @@ final class SystemPath
      */
     public static function rootPath($path = '')
     {
-        return Path::concatPath(APP_ROOT, $path);
+        return Path::rootConcatPath(APP_ROOT, $path);
     }
 
     /**
@@ -56,7 +56,7 @@ final class SystemPath
      */
     public static function wbAppGenPath($path = '')
     {
-        return Path::concatPath(APP_WORKBENCH_ROOT, self::WB_APP_GEN, $path);
+        return Path::rootConcatPath(APP_WORKBENCH_ROOT, self::WB_APP_GEN, $path);
     }
 
     /**
@@ -67,7 +67,7 @@ final class SystemPath
      */
     public static function workbenchPath($path = '')
     {
-        return Path::concatPath(APP_WORKBENCH_ROOT, $path);
+        return Path::rootConcatPath(APP_WORKBENCH_ROOT, $path);
     }
 
     /**
@@ -89,7 +89,7 @@ final class SystemPath
      */
     public static function twigCommonHintPath()
     {
-        return Path::concatPath(APP_WORKBENCH_ROOT, static::WB_APP_TWIG_COMMON, func_get_args());
+        return Path::rootConcatPath(APP_WORKBENCH_ROOT, static::WB_APP_TWIG_COMMON, func_get_args());
     }
 
     /**
@@ -100,7 +100,7 @@ final class SystemPath
      */
     public static function netbeansHintPath()
     {
-        return Path::concatPath(APP_WORKBENCH_ROOT, static::WB_APP_GEN_NETBEANS, func_get_args());
+        return Path::rootConcatPath(APP_WORKBENCH_ROOT, static::WB_APP_GEN_NETBEANS, func_get_args());
     }
 
     /**
@@ -111,7 +111,7 @@ final class SystemPath
      */
     public static function doctrineFilesPath()
     {
-        return Path::concatPath(APP_WORKBENCH_ROOT, static::WB_APP_GEN_DOCTRINE, func_get_args());
+        return Path::rootConcatPath(APP_WORKBENCH_ROOT, static::WB_APP_GEN_DOCTRINE, func_get_args());
     }
 
 }
